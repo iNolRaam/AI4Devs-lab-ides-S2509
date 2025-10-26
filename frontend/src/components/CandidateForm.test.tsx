@@ -10,6 +10,20 @@ describe('CandidateForm', () => {
     // Accessibility: dialog has heading
     expect(screen.getByRole('heading', { name: /add candidate/i })).toBeInTheDocument();
   });
+  it('shows character counters and caps input', () => {
+    render(<CandidateForm />);
+    const firstNameInput = screen.getByLabelText(/first name/i);
+    fireEvent.change(firstNameInput, { target: { value: 'A'.repeat(50) } });
+    expect(firstNameInput).toHaveValue('A'.repeat(40));
+    expect(screen.getByText('40/40')).toBeInTheDocument();
+  });
+
+  it('preserves unsent form state in localStorage', () => {
+    render(<CandidateForm />);
+    const lastNameInput = screen.getByLabelText(/last name/i);
+    fireEvent.change(lastNameInput, { target: { value: 'Smith' } });
+    expect(JSON.parse(localStorage.getItem('candidateFormFields') || '{}').lastName).toBe('Smith');
+  });
 
   it('calls onClose when Close button is clicked', () => {
     const mockClose = jest.fn();
