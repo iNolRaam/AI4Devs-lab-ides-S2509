@@ -10,6 +10,7 @@ Acceptance Criteria:
 - Has ARIA label for accessibility
 - Responsive across devices
 Estimated Effort: S
+Status: Completed
 Files/Modules Affected: frontend/src/App.tsx, frontend/src/index.tsx, frontend/src/components/Dashboard.tsx
 
 ---
@@ -21,6 +22,7 @@ Acceptance Criteria:
 - Navigation is smooth and does not reload the page
 - Works on desktop, tablet, mobile
 Estimated Effort: M
+Status: Completed
 Files/Modules Affected: frontend/src/App.tsx, frontend/src/components/Dashboard.tsx, frontend/src/components/CandidateForm.tsx
 
 ---
@@ -32,4 +34,5 @@ Acceptance Criteria:
 - Responsive layout verified on ≥320px width and desktop breakpoints
 - Works on Chrome, Edge, Firefox, Safari (last 2 versions)
 Estimated Effort: S
+Status: Completed
 Files/Modules Affected: frontend/src/components/Dashboard.tsx, frontend/src/components/CandidateForm.tsx

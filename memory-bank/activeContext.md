@@ -1,35 +1,56 @@
 # Active Context — Current Focus and Decisions
 
-
 Last reviewed: 2025-10-26
 
 ## Current Focus
 
-- Memory Bank updated: Features "add-candidate-entry-point" and "candidate-registration-form" are complete and documented.
-- Next: Align backend root response and tests (test expects "Hello World!" but server returns "Hola LTI!").
-- Plan and implement initial API endpoints (e.g., `/api/users`).
-- Ensure Prisma schema and migrations are ready for candidate data.
+- Memory Bank synced. Three features are defined and ready for implementation:
+	- add-candidate-entry-point (ACEP)
+	- candidate-registration-form (CRF)
+	- validation (VAL)
+- Backend root response vs test mismatch remains: tests expect "Hello World!", server returns "Hola LTI!".
+- Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
+- Prepare to move into PHASE 3 (Code Generation) via /implement <TASK_ID>.
 
-## Recent Changes and Observations
+## Feature snapshots
 
-- Backend Express server running at port 3010; error handling middleware present.
-- Jest test scaffolding in backend and frontend.
-- Prisma schema includes `User` model; candidate model planned/added.
-- Docker Compose provides local PostgreSQL for development.
-- "Add Candidate" entry point and registration form implemented per PRD/design/tasks.
+- add-candidate-entry-point
+	- Goal: prominent, accessible "Add Candidate" action on Dashboard → opens Candidate Form via client-side navigation.
+	- Tasks: ACEP-1, ACEP-2, ACEP-3.
 
-## Next Steps
+- candidate-registration-form
+	- Goal: accessible, responsive form with required fields and guidance; integrates with backend API.
+	- Tasks: CRF-1 … CRF-8 (UI, validation, API, persistence, edge cases).
 
-- Fix backend root response/test mismatch.
-- Add API route structure for users/candidates.
-- Configure `.env` for DB credentials (use placeholders, never commit secrets).
-- Run Prisma generate/migrate and seed if needed.
-- Document API contracts and wire Swagger if desired.
-- Connect frontend to backend health endpoint.
+- validation
+	- Goal: client- and server-side validation including email and optional CV file type/size.
+	- Tasks: VAL-1 … VAL-5 (client rules, file checks, server schema, mapping, tests).
+
+## Recent Observations
+
+- Express backend boots on :3010; Jest scaffolding present across FE/BE.
+- Prisma schema includes User and Candidate; migration folder present.
+- Docker Compose provides local Postgres for development.
+
+## Next steps (actionable)
+
+1) Align backend greeting to make tests green (or update tests consistently).
+2) Apply Prisma migrations locally; generate client; add seed if needed.
+3) Implement initial candidate API: POST /api/candidates (server validation included).
+4) Wire frontend form submission + error mapping; connect Dashboard entry point.
+5) Execute tasks via Kiro‑Lite:
+	 - /implement ACEP-1, ACEP-2, ACEP-3
+	 - /implement CRF-1 … CRF-8
+	 - /implement VAL-1 … VAL-5
 
 ## Active Decisions
 
-- Documentation language: English.
-- TypeScript baseline for FE/BE; Jest for tests.
-- Environment-driven config; secrets never committed.
+- English for code/docs; TypeScript everywhere; Jest for tests.
+- 12‑Factor config via env; secrets never committed (use .env locally, .env.example in repo).
 - Dockerized Postgres for local dev; production deployment out of scope.
+
+## Useful commands
+
+- /update memory bank — refresh active context and progress
+- /implement <TASK_ID> — perform one task from tasks.md
+- /review complete — mark an implementation turn complete

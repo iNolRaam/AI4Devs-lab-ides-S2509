@@ -9,6 +9,7 @@ Acceptance Criteria:
 - Email must match valid format
 - Errors are shown inline and mapped to fields
 Effort: M
+Status: Completed
 Files/Modules: frontend/src/components/CandidateForm.tsx
 
 ---
@@ -19,6 +20,7 @@ Acceptance Criteria:
 - Only PDF/DOCX files ≤ 5 MB are accepted
 - Invalid files are rejected with a clear message
 Effort: S
+Status: Completed
 Files/Modules: frontend/src/components/CandidateForm.tsx
 
 ---
@@ -29,6 +31,7 @@ Acceptance Criteria:
 - Server enforces same validation as client
 - Field errors returned in structured format
 Effort: M
+Status: Completed
 Files/Modules: backend/src/index.ts
 
 ---
@@ -39,6 +42,7 @@ Acceptance Criteria:
 - Field errors are mapped to inputs
 - Non-field errors appear in toast/banner
 Effort: S
+Status: Completed
 Files/Modules: frontend/src/components/CandidateForm.tsx
 
 ---
@@ -49,4 +53,5 @@ Acceptance Criteria:
 - Tests cover required fields, email format, CV file type/size
 - Tests verify error mapping and feedback
 Effort: M
+Status: Completed
 Files/Modules: frontend/src/components/CandidateForm.test.tsx, backend/src/tests/

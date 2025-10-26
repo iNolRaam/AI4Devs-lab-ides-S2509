@@ -21,7 +21,7 @@ const initialState = {
   cvFile: null,
 };
 
-const CandidateForm: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
+const CandidateForm: React.FC<{ onClose?: () => void; onViewCandidate?: () => void }> = ({ onClose, onViewCandidate }) => {
   // Restore unsent form state from localStorage if available
   const [fields, setFields] = useState(() => {
     try {
@@ -167,8 +167,34 @@ const CandidateForm: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
         {success ? (
     <output aria-live="polite" style={{ color: 'green', marginBottom: '1em' }}>
             Candidate added successfully.<br />
-            <button type="button" onClick={() => setSuccess(false)} style={{ marginTop: '0.5em', marginRight: '1em', background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.5rem 1.5rem', cursor: 'pointer' }}>Add Another Candidate</button>
-            <button type="button" onClick={onClose} style={{ marginTop: '0.5em', background: '#eee', border: 'none', borderRadius: '4px', padding: '0.5rem 1.5rem', cursor: 'pointer' }}>Close</button>
+            <div style={{ display: 'flex', gap: '1em', marginTop: '1em' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setSuccess(false);
+                  setFields(initialState);
+                  setCvFile(null);
+                }}
+                style={{ background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.5rem 1.5rem', cursor: 'pointer' }}
+              >
+                Add Another Candidate
+              </button>
+              <button
+                type="button"
+                aria-label="View Candidate"
+                onClick={() => {
+                  if (onViewCandidate) {
+                    onViewCandidate();
+                  } else {
+                    alert('View Candidate: Not implemented');
+                  }
+                }}
+                style={{ background: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.5rem 1.5rem', cursor: 'pointer' }}
+              >
+                View Candidate
+              </button>
+              <button type="button" onClick={onClose} style={{ background: '#eee', border: 'none', borderRadius: '4px', padding: '0.5rem 1.5rem', cursor: 'pointer' }}>Close</button>
+            </div>
     </output>
         ) : (
   <form aria-labelledby="candidate-form-title" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} onSubmit={handleSubmit} noValidate encType="multipart/form-data">

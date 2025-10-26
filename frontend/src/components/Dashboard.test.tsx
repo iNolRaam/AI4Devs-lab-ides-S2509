@@ -26,6 +26,6 @@ describe('Dashboard', () => {
     render(<Dashboard />);
     const button = screen.getByRole('button', { name: /add candidate/i });
     // Responsive style check (font size)
-    expect(button).toHaveStyle('font-size: 1rem');
+    expect(button).toHaveStyle({ fontSize: '1.25rem' });
   });
 });

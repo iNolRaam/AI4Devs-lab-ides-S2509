@@ -9,6 +9,7 @@
     - Required fields are visually indicated.
     - Responsive layout for desktop, tablet, mobile.
   Effort: M
+  Status: Completed
   Files/Modules: frontend/src/components/CandidateForm.tsx, frontend/src/App.tsx
 
 ---
@@ -20,6 +21,7 @@
     - Email must match valid format; phone must match example format.
     - Inline errors are shown and mapped to fields.
   Effort: M
+  Status: Completed
   Files/Modules: frontend/src/components/CandidateForm.tsx
 
 ---
@@ -30,6 +32,7 @@
     - Email and Phone fields display help text/examples.
     - Help text is accessible and visible on focus.
   Effort: S
+  Status: Completed
   Files/Modules: frontend/src/components/CandidateForm.tsx
 
 ---
@@ -41,6 +44,7 @@
     - Keyboard navigation and focus order are logical.
     - Error messages are announced via ARIA.
   Effort: M
+  Status: Completed
   Files/Modules: frontend/src/components/CandidateForm.tsx
 
 ---
@@ -52,6 +56,7 @@
     - On success, show confirmation and next actions.
     - On error, show actionable message and map field errors.
   Effort: M
+  Status: Completed
   Files/Modules: frontend/src/components/CandidateForm.tsx, backend/src/index.ts
 
 ---
@@ -63,6 +68,7 @@
     - Field errors returned in structured format.
     - Duplicate email returns clear error.
   Effort: M
+  Status: Completed
   Files/Modules: backend/src/index.ts
 
 ---
@@ -73,6 +79,7 @@
     - Candidate record is created with all fields and createdAt/createdByUserId.
     - Data is retrievable via search/list.
   Effort: M
+  Status: Completed
   Files/Modules: backend/prisma/schema.prisma, backend/src/index.ts
 
 ---
@@ -83,4 +90,5 @@
     - Large text fields are trimmed/capped; counters shown if needed.
     - Form state is preserved on connectivity issues.
   Effort: M
+  Status: Completed
   Files/Modules: frontend/src/components/CandidateForm.tsx
