@@ -41,8 +41,40 @@ app.post('/api/candidates', async (req: Request, res: Response) => {
   if (Object.keys(errors).length > 0) {
     return res.status(400).json({ errors });
   }
-  // TODO: Add duplicate email check and DB persistence in later tasks
-  return res.status(201).json({ message: 'Candidate added successfully.' });
+  // Duplicate email check (server-side validation)
+  try {
+    const existing = await prisma.$queryRaw<{ exists: number }[]>`
+      SELECT 1 as "exists" FROM "Candidate" WHERE "email" = ${email} LIMIT 1
+    `;
+    if (Array.isArray(existing) && existing.length > 0) {
+      return res.status(400).json({ errors: { email: 'A candidate with this email already exists.' } });
+    }
+  } catch (error_) {
+    // If the table doesn't exist yet (prior to persistence task), do not fail the request here.
+    // Log and continue so other validations still work.
+    console.warn('Duplicate check skipped (likely missing Candidate table):', error_);
+  }
+
+  // Persist candidate record in DB
+  try {
+    const candidate = await prisma.candidate.create({
+      data: {
+        firstName,
+        lastName,
+        email,
+        phone,
+        address,
+        education,
+        workExperience,
+        // createdAt is auto-set by Prisma
+        // createdByUserId: null // can be set if user context is available
+      },
+    });
+    return res.status(201).json({ message: 'Candidate added successfully.', candidate });
+  } catch (error) {
+    console.error('Error persisting candidate:', error);
+    return res.status(500).json({ error: 'Failed to save candidate.' });
+  }
 });
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -51,6 +83,8 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send('Something broke!');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+  });
+}
