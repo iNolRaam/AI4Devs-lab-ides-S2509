@@ -9,6 +9,7 @@ const MAX_LENGTHS = {
   education: 80,
   workExperience: 200,
 };
+
 const initialState = {
   firstName: '',
   lastName: '',
@@ -17,6 +18,7 @@ const initialState = {
   address: '',
   education: '',
   workExperience: '',
+  cvFile: null,
 };
 
 const CandidateForm: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
@@ -29,7 +31,10 @@ const CandidateForm: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
       return initialState;
     }
   });
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [cvFile, setCvFile] = useState<File | null>(null);
+
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
@@ -48,11 +53,30 @@ const CandidateForm: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
     if (!fields.address.trim()) newErrors.address = 'Address is required.';
     if (!fields.education.trim()) newErrors.education = 'Education is required.';
     if (!fields.workExperience.trim()) newErrors.workExperience = 'Work experience is required.';
+    // CV file validation (optional)
+    if (cvFile) {
+      const allowedTypes = [
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      ];
+      if (!allowedTypes.includes(cvFile.type)) {
+        newErrors.cvFile = 'Upload a PDF or DOCX file.';
+      } else if (cvFile.size > 5 * 1024 * 1024) {
+        newErrors.cvFile = 'File must be ≤ 5 MB.';
+      }
+    }
     return newErrors;
   };
 
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, files } = e.target;
+    if (type === 'file' && name === 'cvFile') {
+      const file = files?.[0] ?? null;
+      setCvFile(file);
+      setErrors({ ...errors, cvFile: '' });
+      return;
+    }
     // Trim/cap large text entries
     let trimmed = value;
     if (MAX_LENGTHS[name as keyof typeof MAX_LENGTHS]) {
@@ -80,14 +104,20 @@ const CandidateForm: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
       return;
     }
     try {
+      // Prepare form data for file upload
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(fields)) {
+        if (key !== 'cvFile') formData.append(key, typeof value === 'string' ? value : '');
+      }
+  if (cvFile) formData.append('cvFile', cvFile);
       const response = await fetch('http://localhost:3010/api/candidates', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(fields),
+        body: formData,
       });
       if (response.ok) {
         setSuccess(true);
         setFields(initialState);
+        setCvFile(null);
         setErrors({});
         localStorage.removeItem('candidateFormFields');
       } else if (response.status === 400) {
@@ -98,6 +128,7 @@ const CandidateForm: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
         setGlobalError('We couldn’t save the candidate. Please try again.');
       }
     } catch (err) {
+      // Optionally log error for debugging
       setGlobalError('Network error. Please try again.');
     }
   };
@@ -140,7 +171,24 @@ const CandidateForm: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
             <button type="button" onClick={onClose} style={{ marginTop: '0.5em', background: '#eee', border: 'none', borderRadius: '4px', padding: '0.5rem 1.5rem', cursor: 'pointer' }}>Close</button>
     </output>
         ) : (
-        <form aria-labelledby="candidate-form-title" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} onSubmit={handleSubmit} noValidate>
+  <form aria-labelledby="candidate-form-title" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} onSubmit={handleSubmit} noValidate encType="multipart/form-data">
+          <label htmlFor="cvFile">
+            CV Upload (PDF or DOCX, ≤ 5 MB)
+            <input
+              id="cvFile"
+              name="cvFile"
+              type="file"
+              accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              onChange={handleChange}
+              aria-describedby={errors.cvFile ? 'cvFile-error' : undefined}
+            />
+            {errors.cvFile && (
+              <span id="cvFile-error" style={{ color: 'red', fontSize: '0.9em' }} role="alert" aria-live="assertive">{errors.cvFile}</span>
+            )}
+            {cvFile && !errors.cvFile && (
+              <span style={{ fontSize: '0.8em', color: '#888' }}>Selected: {cvFile.name} ({(cvFile.size / 1024 / 1024).toFixed(2)} MB)</span>
+            )}
+          </label>
           <label htmlFor="firstName">
             First Name <span style={{ color: 'red' }}>*</span>
             <input id="firstName" name="firstName" type="text" placeholder="e.g. Jane" value={fields.firstName} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.firstName} aria-describedby={errors.firstName ? 'firstName-error firstName-count' : 'firstName-count'} maxLength={MAX_LENGTHS.firstName} />
