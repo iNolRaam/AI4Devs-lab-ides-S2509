@@ -8,11 +8,16 @@ Last reviewed: 2025-10-26
 	- add-candidate-entry-point (ACEP)
 	- candidate-registration-form (CRF)
 	- validation (VAL)
+- successful-submission (SS) is completed and documented; focus remains on ACEP, CRF, and VAL for implementation.
 - Backend root response vs test mismatch remains: tests expect "Hello World!", server returns "Hola LTI!".
 - Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
 - Prepare to move into PHASE 3 (Code Generation) via /implement <TASK_ID>.
 
 ## Feature snapshots
+
+- successful-submission
+	- Status: Completed (2025-10-26)
+	- Outcome: confirmation message shown, next actions available (View Candidate, Add Another), candidate retrievable within 5s, a11y considerations applied.
 
 - add-candidate-entry-point
 	- Goal: prominent, accessible "Add Candidate" action on Dashboard → opens Candidate Form via client-side navigation.

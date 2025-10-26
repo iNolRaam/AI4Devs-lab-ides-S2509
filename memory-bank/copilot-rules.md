@@ -40,6 +40,14 @@
 - Cover: route handlers, services, Prisma data access (with test DB or mocks), and critical UI flows.
 - Keep tests fast and deterministic; avoid network calls in unit tests.
 
+## ♿ Accessibility
+
+- Meet WCAG 2.1 AA for all interactive UI, including confirmations and next actions.
+- Announce confirmation messages via ARIA live regions (e.g., `aria-live="polite"`), with semantic containers.
+- Manage focus after significant actions (e.g., move focus to the confirmation heading/container).
+- Ensure all controls are keyboard reachable, have visible focus, and discernible names/labels.
+- Prefer semantic HTML over ARIA where possible; avoid non-semantic clickable elements.
+
 ## 📦 Dependencies
 
 - Pin to stable versions; avoid unnecessary libraries. Periodically update minors/patches.

@@ -4,17 +4,21 @@ Last reviewed: 2025-10-26
 
 ## Feature status (by Kiro‑Lite phases)
 
+- successful-submission (SS)
+	- PRD: present • Design: present • Tasks: present • Status: Completed (2025-10-26)
+	- Completed tasks: SS-1, SS-2, SS-3, SS-4, SS-5
+
 - add-candidate-entry-point (ACEP)
-	- PRD: present • Design: present • Tasks: present → Ready for PHASE 3
-	- Open tasks: ACEP-1, ACEP-2, ACEP-3
+	- PRD: present • Design: present • Tasks: present • Status: Completed (2025-10-26)
+	- Completed tasks: ACEP-1, ACEP-2, ACEP-3
 
 - candidate-registration-form (CRF)
-	- PRD: present • Design: present • Tasks: present → Ready for PHASE 3
-	- Open tasks: CRF-1 … CRF-8
+	- PRD: present • Design: present • Tasks: present • Status: Completed (2025-10-26)
+	- Completed tasks: CRF-1, CRF-2, CRF-3, CRF-4, CRF-5, CRF-6, CRF-7, CRF-8
 
 - validation (VAL)
-	- PRD: present • Design: present • Tasks: present → Ready for PHASE 3
-	- Open tasks: VAL-1 … VAL-5
+	- PRD: present • Design: present • Tasks: present • Status: Completed (2025-10-26)
+	- Completed tasks: VAL-1, VAL-2, VAL-3, VAL-4, VAL-5
 
 ## What works today
 
@@ -22,6 +26,7 @@ Last reviewed: 2025-10-26
 - Jest scaffolding in FE/BE; React app present with tests.
 - Prisma schema with User and Candidate; migration folder committed.
 - Local Postgres via Docker Compose for development.
+- Successful Submission UX: user sees “Candidate added successfully.” and next actions (View Candidate, Add Another); candidate is retrievable within 5s.
 
 ## What’s left to build (near-term)
 
