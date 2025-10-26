@@ -28,6 +28,49 @@
   color: #61dafb;
 }
 
+/* Dashboard and Add Candidate Button */
+.dashboard {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.add-candidate-btn {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 2rem;
+  transition: box-shadow 0.2s;
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 1rem;
+  }
+  .add-candidate-btn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Modal dialog responsiveness */
+dialog[open] {
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  border: none;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 400px) {
+  dialog[open] > div {
+    min-width: 90vw;
+    padding: 1rem;
+  }
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
