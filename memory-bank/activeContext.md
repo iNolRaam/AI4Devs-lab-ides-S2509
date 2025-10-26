@@ -2,13 +2,16 @@
 
 Last reviewed: 2025-10-26
 
+
 ## Current Focus
 
-- Memory Bank synced. Three features are defined and ready for implementation:
+- Memory Bank synced. Four features are defined and ready for implementation:
 	- add-candidate-entry-point (ACEP)
 	- candidate-registration-form (CRF)
 	- validation (VAL)
-- successful-submission (SS) is completed and documented; focus remains on ACEP, CRF, and VAL for implementation.
+	- error-handling (ERR)
+- successful-submission (SS) is completed and documented; focus remains on ACEP, CRF, VAL, and ERR for implementation.
+- ERR-1 (Request ID middleware) implemented and reviewed; ready for ERR-2 next.
 - Backend root response vs test mismatch remains: tests expect "Hello World!", server returns "Hola LTI!".
 - Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
 - Prepare to move into PHASE 3 (Code Generation) via /implement <TASK_ID>.

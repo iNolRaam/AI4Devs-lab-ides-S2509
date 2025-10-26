@@ -1,3 +1,4 @@
+
 ## 🚀 Architecture and design
 
 - You must use the clean architecture + DDD patterns.
@@ -7,6 +8,8 @@
  - Use Node and Express best practices for the BackEnd.
  - Use PostgreSQL best practices for database design and access.
 - You must follow the SOLID principles, KISS, and YAGNI principles.
+
+- Error-handling feature: All backend requests must have a requestId (from X-Request-Id or generated UUID) attached and returned in response headers. This enables correlation and observability without leaking PII. Use the requestId middleware pattern for all new endpoints.
 
 ## ✅ Coding conventions
 

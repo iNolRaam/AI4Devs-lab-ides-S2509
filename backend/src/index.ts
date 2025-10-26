@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import { requestIdMiddleware } from './middleware/requestId';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
@@ -13,6 +14,8 @@ export default prisma;
 const port = 3010;
 
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// Attach requestId middleware as the first middleware after CORS
+app.use(requestIdMiddleware);
 import multer from 'multer';
 
 const upload = multer({
