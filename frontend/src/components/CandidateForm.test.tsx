@@ -187,4 +187,48 @@ describe('CandidateForm', () => {
 
     (globalThis.fetch as jest.Mock).mockRestore();
   });
+
+  it('shows global error banner on server failure (500) with assertive aria-live', async () => {
+    globalThis.fetch = jest.fn(() => Promise.resolve({ ok: false, status: 500 })) as jest.Mock;
+
+    render(<CandidateForm />);
+    // Fill required fields
+    fireEvent.change(screen.getByLabelText(/first name/i), { target: { value: 'John' } });
+    fireEvent.change(screen.getByLabelText(/last name/i), { target: { value: 'Doe' } });
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'john.doe@example.com' } });
+    fireEvent.change(screen.getByLabelText(/phone/i), { target: { value: '+1 555 123 4567' } });
+    fireEvent.change(screen.getByLabelText(/address/i), { target: { value: '123 Main St' } });
+    fireEvent.change(screen.getByLabelText(/education/i), { target: { value: 'BSc' } });
+    fireEvent.change(screen.getByLabelText(/work experience/i), { target: { value: '2 years' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /^add candidate$/i }));
+
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent(/we couldn’t save the candidate/i);
+    expect(alert).toHaveAttribute('aria-live', 'assertive');
+
+    (globalThis.fetch as jest.Mock).mockRestore();
+  });
+
+  it('shows global error banner on network failure with assertive aria-live', async () => {
+    globalThis.fetch = jest.fn(() => Promise.reject(new Error('Network down'))) as jest.Mock;
+
+    render(<CandidateForm />);
+    // Fill required fields
+    fireEvent.change(screen.getByLabelText(/first name/i), { target: { value: 'John' } });
+    fireEvent.change(screen.getByLabelText(/last name/i), { target: { value: 'Doe' } });
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'john.doe@example.com' } });
+    fireEvent.change(screen.getByLabelText(/phone/i), { target: { value: '+1 555 123 4567' } });
+    fireEvent.change(screen.getByLabelText(/address/i), { target: { value: '123 Main St' } });
+    fireEvent.change(screen.getByLabelText(/education/i), { target: { value: 'BSc' } });
+    fireEvent.change(screen.getByLabelText(/work experience/i), { target: { value: '2 years' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /^add candidate$/i }));
+
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent(/network error/i);
+    expect(alert).toHaveAttribute('aria-live', 'assertive');
+
+    (globalThis.fetch as jest.Mock).mockRestore();
+  });
 });

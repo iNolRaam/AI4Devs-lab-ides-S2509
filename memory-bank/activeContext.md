@@ -9,17 +9,16 @@ Last reviewed: 2025-10-26
 	- candidate-registration-form (CRF)
 	- validation (VAL)
 	- error-handling (ERR)
- Memory Bank synced. Four features are defined and ready for implementation:
+ All four features (ACEP, CRF, VAL, ERR) are implemented and tested.
 
 ## Feature snapshots
 
 - successful-submission
- successful-submission (SS) is completed and documented; focus remains on ACEP, CRF, VAL, and ERR for implementation.
+ successful-submission (SS) is completed and documented; core delivery (ACEP, CRF, VAL, ERR) is implemented and verified by tests.
  ERR-1 (Request ID middleware) implemented and reviewed; ERR-2 (Canonical error codes/types) completed and tested; ERR-3 (Error normalizer utility) completed with unit tests.
  Backend root response vs test mismatch resolved: tests and server both use "Hola LTI!".
  Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
- Error-handling foundation is complete and tested: ERR-1 (Request ID middleware), ERR-2 (Canonical error codes/types), ERR-3 (Error normalizer utility), ERR-4 (central error middleware), ERR-5 (structured logging with redaction), ERR-6 (frontend AppError + decoder), ERR-7 (accessible ErrorBanner), ERR-8 (field error mapping + focus), ERR-9 (CV type/size validation), ERR-10 (backend error DTO integration tests + route normalization), ERR-11 (propagate X-Request-Id to frontend logs/telemetry), and ERR-12 (docs & developer guide) are implemented with tests/docs.
- Prepare to move into remaining tasks via /implement <TASK_ID>.
+ Error-handling foundation is complete and tested: ERR-1 … ERR-13 are implemented with tests/docs.
 	- Status: Completed (2025-10-26)
 	- Outcome: confirmation message shown, next actions available (View Candidate, Add Another), candidate retrievable within 5s, a11y considerations applied.
 
@@ -50,8 +49,7 @@ Last reviewed: 2025-10-26
 
 1) Apply Prisma migrations locally; generate client; add seed if needed.
 2) Wire frontend Candidate Form submission + error mapping; connect Dashboard entry point.
-3) Execute remaining ERR tasks via Kiro‑Lite:
-	- /implement ERR-13 (smoke test UI happy + error)
+3) Error-handling (ERR) feature is complete; maintain tests and docs going forward.
 
 ## Active Decisions
 

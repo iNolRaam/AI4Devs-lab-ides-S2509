@@ -156,7 +156,7 @@ Acceptance Criteria:
 - Component/integration test covers both pathways
 - Assertions on focus management and aria-live behavior
 Effort: M
-Status: Not started
+Status: Completed
 Files/Modules: frontend/src/components/CandidateForm.test.tsx
 
 ---

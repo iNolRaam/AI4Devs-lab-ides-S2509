@@ -21,9 +21,8 @@ Last reviewed: 2025-10-26
 	- Completed tasks: VAL-1, VAL-2, VAL-3, VAL-4, VAL-5
 
 - error-handling (ERR)
-	- PRD: present • Design: present • Tasks: present • Status: In progress
-	- Completed tasks: ERR-1, ERR-2, ERR-3, ERR-4, ERR-5, ERR-6, ERR-7, ERR-8, ERR-9, ERR-10, ERR-11, ERR-12
-	- Next: ERR-13
+	- PRD: present • Design: present • Tasks: present • Status: Completed (2025-10-26)
+	- Completed tasks: ERR-1, ERR-2, ERR-3, ERR-4, ERR-5, ERR-6, ERR-7, ERR-8, ERR-9, ERR-10, ERR-11, ERR-12, ERR-13
 
 ## What works today
 
@@ -37,7 +36,7 @@ Last reviewed: 2025-10-26
 ## What’s left to build (near-term)
 
 1) Apply Prisma migrations and generate client; add seed if needed.
-2) Wire frontend Candidate Form submission and error mapping; smoke test (ERR-13).
+2) Wire frontend Candidate Form submission and error mapping.
 
 ## Known issues and risks
 
