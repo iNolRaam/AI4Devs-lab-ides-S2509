@@ -90,4 +90,4 @@ Your job is to think before coding—and to follow process with precision.
 
 
 
-## Cuarto paso (GPT-4): Crear la lista de features a partir de las user stories del PRD e ir trabajando en cada una de ellas siguiendo el proceso de Kiro.
+## Cuarto paso (GPT-4): Crear la lista de features a partir de las user stories del PRD e ir trabajando en cada una de ellas como un feature distinto siguiendo el proceso de Kiro.
