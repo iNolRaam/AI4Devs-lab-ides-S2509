@@ -1,5 +1,6 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import { requestIdMiddleware } from './middleware/requestId';
+import { errorMiddleware } from './middleware/error';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
@@ -116,11 +117,8 @@ app.post('/api/candidates', upload.single('cvFile'), async (req: Request, res: R
   }
 });
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.type('text/plain'); 
-  res.status(500).send('Something broke!');
-});
+// Centralized error handler should be the last middleware
+app.use(errorMiddleware);
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {

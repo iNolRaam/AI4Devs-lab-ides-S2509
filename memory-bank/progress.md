@@ -22,8 +22,8 @@ Last reviewed: 2025-10-26
 
 - error-handling (ERR)
 	- PRD: present • Design: present • Tasks: present • Status: In progress
-	- Completed tasks: ERR-1, ERR-2, ERR-3
-	- Next: ERR-4 (central error middleware), ERR-5 (structured logging)
+	- Completed tasks: ERR-1, ERR-2, ERR-3, ERR-4, ERR-5
+	- Next: ERR-6 (frontend AppError + decoder)
 
 ## What works today
 
@@ -38,7 +38,7 @@ Last reviewed: 2025-10-26
 
 1) Apply Prisma migrations and generate client; add seed if needed.
 2) Implement POST /api/candidates with server-side validation.
-3) Implement ERR-4 (central error middleware) and ERR-5 (structured logging with redaction).
+3) Implement ERR-6 (frontend AppError + decoder) and ERR-7 (ErrorBanner), then ERR-8/ERR-9 for field/UI mapping.
 4) Wire frontend Candidate Form submission and error mapping.
 5) Execute tasks via /implement <TASK_ID> (see lists above).
 

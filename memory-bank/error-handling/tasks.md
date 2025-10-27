@@ -49,7 +49,7 @@ Acceptance Criteria:
 - Logs a single structured line per error (console JSON ok)
 - Integration tests verify status/body/headers
 Effort: M
-Status: Not started
+Status: Completed
 Files/Modules: backend/src/middleware/error.ts, backend/src/index.ts, backend/src/tests/
 
 ---
@@ -61,7 +61,7 @@ Acceptance Criteria:
 - No PII present (names, email, phone, address, file content)
 - Unit test asserts redaction behavior
 Effort: S
-Status: Not started
+Status: Complete
 Files/Modules: backend/src/utils/logging.ts, backend/src/middleware/error.ts, backend/src/tests/
 
 ---

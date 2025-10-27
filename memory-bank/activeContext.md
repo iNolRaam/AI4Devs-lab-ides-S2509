@@ -18,7 +18,7 @@ Last reviewed: 2025-10-26
  ERR-1 (Request ID middleware) implemented and reviewed; ERR-2 (Canonical error codes/types) completed and tested; ERR-3 (Error normalizer utility) completed with unit tests.
  Backend root response vs test mismatch resolved: tests and server both use "Hola LTI!".
  Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
- Error-handling foundation up to ERR-3 is complete and tested. Next: implement central error middleware (ERR-4) and structured logging (ERR-5).
+ Error-handling foundation is complete and tested: ERR-1 (Request ID middleware), ERR-2 (Canonical error codes/types), ERR-3 (Error normalizer utility), ERR-4 (central error middleware), and ERR-5 (structured logging with redaction) are implemented with tests.
  Prepare to move into PHASE 3 (Code Generation) via /implement <TASK_ID>.
 	- Status: Completed (2025-10-26)
 	- Outcome: confirmation message shown, next actions available (View Candidate, Add Another), candidate retrievable within 5s, a11y considerations applied.
@@ -46,13 +46,13 @@ Last reviewed: 2025-10-26
 
 1) Apply Prisma migrations locally; generate client; add seed if needed.
 2) Implement initial candidate API: POST /api/candidates (server validation included).
-3) Implement ERR-4 (central error middleware) and ERR-5 (structured logging with redaction).
+3) Implement frontend error handling: ERR-6 (AppError + decoder), ERR-7 (ErrorBanner), then ERR-8/ERR-9 for inline mapping.
 4) Wire frontend form submission + error mapping; connect Dashboard entry point.
 5) Execute tasks via Kiro‑Lite:
 	 - /implement ACEP-1, ACEP-2, ACEP-3
 	 - /implement CRF-1 … CRF-8
 	 - /implement VAL-1 … VAL-5
-	 - /implement ERR-4, /implement ERR-5
+	- /implement ERR-6
 
 ## Active Decisions
 
