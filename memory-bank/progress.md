@@ -20,6 +20,11 @@ Last reviewed: 2025-10-26
 	- PRD: present • Design: present • Tasks: present • Status: Completed (2025-10-26)
 	- Completed tasks: VAL-1, VAL-2, VAL-3, VAL-4, VAL-5
 
+- error-handling (ERR)
+	- PRD: present • Design: present • Tasks: present • Status: In progress
+	- Completed tasks: ERR-1, ERR-2, ERR-3
+	- Next: ERR-4 (central error middleware), ERR-5 (structured logging)
+
 ## What works today
 
 - Backend Express server boots on http://localhost:3010; TypeScript and error middleware configured.
@@ -27,18 +32,18 @@ Last reviewed: 2025-10-26
 - Prisma schema with User and Candidate; migration folder committed.
 - Local Postgres via Docker Compose for development.
 - Successful Submission UX: user sees “Candidate added successfully.” and next actions (View Candidate, Add Another); candidate is retrievable within 5s.
+ - Error normalizer (ERR-3) in place with unit tests; requestId middleware (ERR-1) active; canonical errors (ERR-2) defined.
 
 ## What’s left to build (near-term)
 
-1) Align backend root response with tests (green baseline).
-2) Apply Prisma migrations and generate client; add seed if needed.
-3) Implement POST /api/candidates with server-side validation.
+1) Apply Prisma migrations and generate client; add seed if needed.
+2) Implement POST /api/candidates with server-side validation.
+3) Implement ERR-4 (central error middleware) and ERR-5 (structured logging with redaction).
 4) Wire frontend Candidate Form submission and error mapping.
 5) Execute tasks via /implement <TASK_ID> (see lists above).
 
 ## Known issues and risks
 
-- Greeting mismatch: tests expect "Hello World!" but server says "Hola LTI!".
 - Ensure no secrets are committed; use env vars and .env.example.
 
 ## Timeline hint

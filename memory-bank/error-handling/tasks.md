@@ -37,8 +37,8 @@ Acceptance Criteria:
 - Unknown errors map to INTERNAL_ERROR 500 with generic message
 - No PII included in output
 Effort: M
-Status: Not started
-Files/Modules: backend/src/utils/errorNormalizer.ts, backend/src/tests/
+Status: Completed
+Files/Modules: backend/src/utils/errorNormalizer.ts, backend/src/tests/errorNormalizer.test.ts
 
 ---
 ID: ERR-4

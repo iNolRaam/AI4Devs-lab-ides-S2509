@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'node:crypto';
 
 /**
  * Middleware to attach a unique requestId to each request.
@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
  */
 export function requestIdMiddleware(req: Request & { requestId?: string }, res: Response, next: NextFunction) {
   const incomingId = req.header('X-Request-Id');
-  const requestId = incomingId && typeof incomingId === 'string' ? incomingId : uuidv4();
+  const requestId = incomingId && typeof incomingId === 'string' ? incomingId : randomUUID();
   req.requestId = requestId;
   res.setHeader('X-Request-Id', requestId);
   next();
