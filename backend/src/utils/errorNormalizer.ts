@@ -97,7 +97,13 @@ export function normalizeError(
         break;
       }
       default: {
-        // leave defaults (500, INTERNAL_ERROR, generic message)
+        // Map well-known library error codes (e.g., Multer)
+        if (errCode === 'LIMIT_FILE_SIZE') {
+          status = 413;
+          code = FILE_TOO_LARGE;
+          message = 'File too large';
+        }
+        // else leave defaults (500, INTERNAL_ERROR, generic message)
       }
     }
   }

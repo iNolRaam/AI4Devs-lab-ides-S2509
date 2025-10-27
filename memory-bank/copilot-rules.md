@@ -10,6 +10,7 @@
 - You must follow the SOLID principles, KISS, and YAGNI principles.
 
 - Error-handling feature: All backend requests must have a requestId (from X-Request-Id or generated UUID) attached and returned in response headers. This enables correlation and observability without leaking PII. Use the requestId middleware pattern for all new endpoints.
+- Express route handlers must not send ad-hoc error JSON. Throw typed errors (e.g., ValidationError, DuplicateEmailError) and let the central error middleware normalize into the standard DTO. Prefer tagging third‑party errors with canonical codes when possible (e.g., Multer `LIMIT_FILE_SIZE` → `FILE_TOO_LARGE`; set `INVALID_FILE_TYPE` in `fileFilter`).
 
 ## ✅ Coding conventions
 

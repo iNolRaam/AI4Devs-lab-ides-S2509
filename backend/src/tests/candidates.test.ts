@@ -1,16 +1,18 @@
 import request from 'supertest';
 import prisma, { app } from '../index';
+import { VALIDATION_ERROR, DUPLICATE_EMAIL } from '../errors';
 
 describe('POST /api/candidates - server-side validation', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it('returns 400 with field errors when required fields are missing', async () => {
+  it('returns 400 VALIDATION_ERROR with fieldErrors when required fields are missing', async () => {
     const res = await request(app).post('/api/candidates').send({});
     expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty('errors');
-    expect(res.body.errors).toMatchObject({
+    expect(res.body.code).toBe(VALIDATION_ERROR);
+    expect(res.body).toHaveProperty('fieldErrors');
+    expect(res.body.fieldErrors).toMatchObject({
       firstName: expect.any(String),
       lastName: expect.any(String),
       email: expect.any(String),
@@ -21,7 +23,7 @@ describe('POST /api/candidates - server-side validation', () => {
     });
   });
 
-  it('returns 400 for invalid email and phone format', async () => {
+  it('returns 400 VALIDATION_ERROR for invalid email and phone format', async () => {
     const res = await request(app).post('/api/candidates').send({
       firstName: 'Jane',
       lastName: 'Doe',
@@ -32,13 +34,14 @@ describe('POST /api/candidates - server-side validation', () => {
       workExperience: '2 years',
     });
     expect(res.status).toBe(400);
-    expect(res.body.errors).toMatchObject({
+    expect(res.body.code).toBe(VALIDATION_ERROR);
+    expect(res.body.fieldErrors).toMatchObject({
       email: expect.any(String),
       phone: expect.any(String),
     });
   });
 
-  it('returns 400 with field error when email already exists', async () => {
+  it('returns 409 DUPLICATE_EMAIL when email already exists', async () => {
     // Mock duplicate email found
     jest
       .spyOn(prisma, '$queryRaw')
@@ -54,8 +57,7 @@ describe('POST /api/candidates - server-side validation', () => {
       education: 'BSc',
       workExperience: '2 years',
     });
-    expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty('errors');
-    expect(res.body.errors).toHaveProperty('email');
+    expect(res.status).toBe(409);
+    expect(res.body.code).toBe(DUPLICATE_EMAIL);
   });
 });

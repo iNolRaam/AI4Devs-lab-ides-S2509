@@ -1,9 +1,14 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { requestIdMiddleware } from './middleware/requestId';
 import { errorMiddleware } from './middleware/error';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
+import {
+  ValidationError,
+  DuplicateEmailError,
+  INVALID_FILE_TYPE,
+} from './errors';
 
 
 dotenv.config();
@@ -21,7 +26,7 @@ import multer from 'multer';
 
 const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
-  fileFilter: (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  fileFilter: (_req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     const allowedTypes = [
       'application/pdf',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -29,7 +34,11 @@ const upload = multer({
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type. Only PDF and DOCX are allowed.'));
+      // Tag error with canonical code for normalizer to map
+      const err = Object.assign(new Error('Invalid file type. Only PDF and DOCX are allowed.'), {
+        code: INVALID_FILE_TYPE,
+      });
+      cb(err);
     }
   },
 });
@@ -74,48 +83,52 @@ function validateCandidateInput(body: any, file?: Express.Multer.File): { [key: 
   return errors;
 }
 
-app.post('/api/candidates', upload.single('cvFile'), async (req: Request, res: Response) => {
-  const errors = validateCandidateInput(req.body, (req as any).file);
-  if (Object.keys(errors).length > 0) {
-    return res.status(400).json({ errors });
-  }
-  const { firstName, lastName, email, phone, address, education, workExperience } = req.body;
-  // Duplicate email check (server-side validation)
-  try {
-    const existing = await prisma.$queryRaw<{ exists: number }[]>`
-      SELECT 1 as "exists" FROM "Candidate" WHERE "email" = ${email} LIMIT 1
-    `;
-    if (Array.isArray(existing) && existing.length > 0) {
-      return res.status(400).json({ errors: { email: 'A candidate with this email already exists.' } });
-    }
-  } catch (error_) {
-    // If the table doesn't exist yet (prior to persistence task), do not fail the request here.
-    // Log and continue so other validations still work.
-    console.warn('Duplicate check skipped (likely missing Candidate table):', error_);
-  }
+app.post(
+  '/api/candidates',
+  upload.single('cvFile'),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const errors = validateCandidateInput(req.body, (req as any).file);
+      if (Object.keys(errors).length > 0) {
+        return next(new ValidationError('Validation failed', { details: { fieldErrors: errors } } as any));
+      }
 
-  // Persist candidate record in DB
-  try {
-    const candidate = await prisma.candidate.create({
-      data: {
-        firstName,
-        lastName,
-        email,
-        phone,
-        address,
-        education,
-        workExperience,
-        // createdAt is auto-set by Prisma
-        // createdByUserId: null // can be set if user context is available
-        // cvUrl: (req as any).file ? (req as any).file.path : undefined // add storage logic later
-      },
-    });
-    return res.status(201).json({ message: 'Candidate added successfully.', candidate });
-  } catch (error) {
-    console.error('Error persisting candidate:', error);
-    return res.status(500).json({ error: 'Failed to save candidate.' });
+      const { firstName, lastName, email, phone, address, education, workExperience } = req.body;
+      // Duplicate email check (server-side validation)
+      try {
+        const existing = await prisma.$queryRaw<{ exists: number }[]>`
+          SELECT 1 as "exists" FROM "Candidate" WHERE "email" = ${email} LIMIT 1
+        `;
+        if (Array.isArray(existing) && existing.length > 0) {
+          return next(new DuplicateEmailError('A candidate with this email already exists.'));
+        }
+      } catch (error_) {
+        // If the table doesn't exist yet (prior to persistence task), do not fail the request here.
+        // Log and continue so other validations still work.
+        console.warn('Duplicate check skipped (likely missing Candidate table):', error_);
+      }
+
+      // Persist candidate record in DB
+      const candidate = await prisma.candidate.create({
+        data: {
+          firstName,
+          lastName,
+          email,
+          phone,
+          address,
+          education,
+          workExperience,
+          // createdAt is auto-set by Prisma
+          // createdByUserId: null // can be set if user context is available
+          // cvUrl: (req as any).file ? (req as any).file.path : undefined // add storage logic later
+        },
+      });
+      return res.status(201).json({ message: 'Candidate added successfully.', candidate });
+    } catch (error) {
+      return next(error);
+    }
   }
-});
+);
 
 // Centralized error handler should be the last middleware
 app.use(errorMiddleware);

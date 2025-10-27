@@ -121,7 +121,7 @@ Acceptance Criteria:
 - No PII in body
 - Tests live under backend/src/tests/
 Effort: M
-Status: Not started
+Status: Completed
 Files/Modules: backend/src/tests/candidates.error.test.ts
 
 ---
