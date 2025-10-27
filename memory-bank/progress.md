@@ -22,8 +22,8 @@ Last reviewed: 2025-10-26
 
 - error-handling (ERR)
 	- PRD: present • Design: present • Tasks: present • Status: In progress
-	- Completed tasks: ERR-1, ERR-2, ERR-3, ERR-4, ERR-5
-	- Next: ERR-6 (frontend AppError + decoder)
+	- Completed tasks: ERR-1, ERR-2, ERR-3, ERR-4, ERR-5, ERR-6, ERR-7
+	- Next: ERR-8 (Map Field Errors), ERR-9 (CV type/size)
 
 ## What works today
 
@@ -32,13 +32,13 @@ Last reviewed: 2025-10-26
 - Prisma schema with User and Candidate; migration folder committed.
 - Local Postgres via Docker Compose for development.
 - Successful Submission UX: user sees “Candidate added successfully.” and next actions (View Candidate, Add Another); candidate is retrievable within 5s.
- - Error normalizer (ERR-3) in place with unit tests; requestId middleware (ERR-1) active; canonical errors (ERR-2) defined.
+- Error normalizer (ERR-3) in place with unit tests; requestId middleware (ERR-1) active; canonical errors (ERR-2) defined; frontend AppError + decoder (ERR-6) and accessible ErrorBanner (ERR-7) implemented with tests.
 
 ## What’s left to build (near-term)
 
 1) Apply Prisma migrations and generate client; add seed if needed.
 2) Implement POST /api/candidates with server-side validation.
-3) Implement ERR-6 (frontend AppError + decoder) and ERR-7 (ErrorBanner), then ERR-8/ERR-9 for field/UI mapping.
+3) Implement ERR-8/ERR-9 for field/UI mapping.
 4) Wire frontend Candidate Form submission and error mapping.
 5) Execute tasks via /implement <TASK_ID> (see lists above).
 

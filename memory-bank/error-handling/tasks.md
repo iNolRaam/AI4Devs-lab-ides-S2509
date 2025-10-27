@@ -73,8 +73,8 @@ Acceptance Criteria:
 - Network failures produce a generic AppError with code INTERNAL_ERROR
 - Unit tests cover decode paths
 Effort: S
-Status: Not started
-Files/Modules: frontend/src/api/client.ts, frontend/src/tests/
+Status: Completed
+Files/Modules: frontend/src/api/client.ts, frontend/src/tests/api.client.test.ts
 
 ---
 ID: ERR-7
@@ -85,8 +85,8 @@ Acceptance Criteria:
 - Announces via screen readers
 - Unit tests for rendering and dismissal
 Effort: M
-Status: Not started
-Files/Modules: frontend/src/components/ErrorBanner.tsx, frontend/src/components/ErrorBanner.test.tsx
+Status: Completed
+Files/Modules: frontend/src/components/ErrorBanner.tsx, frontend/src/tests/ErrorBanner.test.tsx
 
 ---
 ID: ERR-8
