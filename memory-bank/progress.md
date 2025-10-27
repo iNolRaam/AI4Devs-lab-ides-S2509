@@ -22,8 +22,8 @@ Last reviewed: 2025-10-26
 
 - error-handling (ERR)
 	- PRD: present • Design: present • Tasks: present • Status: In progress
-	- Completed tasks: ERR-1, ERR-2, ERR-3, ERR-4, ERR-5, ERR-6, ERR-7, ERR-8, ERR-9, ERR-10, ERR-11
-	- Next: ERR-13 → ERR-12
+	- Completed tasks: ERR-1, ERR-2, ERR-3, ERR-4, ERR-5, ERR-6, ERR-7, ERR-8, ERR-9, ERR-10, ERR-11, ERR-12
+	- Next: ERR-13
 
 ## What works today
 
@@ -37,9 +37,7 @@ Last reviewed: 2025-10-26
 ## What’s left to build (near-term)
 
 1) Apply Prisma migrations and generate client; add seed if needed.
-2) Implement ERR-11 to propagate X-Request-Id to frontend logs/telemetry.
-3) Wire frontend Candidate Form submission and error mapping; smoke test (ERR-13).
-4) Document error-handling patterns (ERR-12). 
+2) Wire frontend Candidate Form submission and error mapping; smoke test (ERR-13).
 
 ## Known issues and risks
 

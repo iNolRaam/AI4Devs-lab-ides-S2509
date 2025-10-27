@@ -1,6 +1,6 @@
 # Design — Error Handling for "Add Candidate"
 
-Status: Draft for review (awaiting /approve design)
+Status: Implemented — Developer Guide
 Owner: Recruiting Platform Team
 Date: 2025-10-26
 Source PRD: `memory-bank/error-handling/prd.md` (seeded from LTI_App_PRD §4.6)
@@ -96,6 +96,67 @@ Rules
 ### Header conventions
 - Request: `X-Request-Id` (optional from upstream)
 - Response (on error and success): `X-Request-Id: <uuid>`
+
+## Developer guide (How-To)
+
+### Backend: Throw typed errors and let middleware respond
+
+```ts
+import {
+	ValidationError,
+	DuplicateEmailError,
+	InvalidFileTypeError,
+} from '../../backend/src/errors';
+
+// In an Express handler
+if (!email) {
+	throw new ValidationError('Validation failed', {
+		details: { fieldErrors: { email: 'Email is required.' } },
+	} as any);
+}
+if (duplicate) {
+	throw new DuplicateEmailError('A candidate with this email already exists.');
+}
+```
+
+File uploads
+
+```ts
+// Multer is configured with size/type guard. Invalid types are tagged
+// with code INVALID_FILE_TYPE in fileFilter; LIMIT_FILE_SIZE maps to FILE_TOO_LARGE
+// by the error normalizer.
+```
+
+### Frontend: Decode and render
+
+```ts
+import { decodeError, AppError } from '../../frontend/src/api/client';
+
+const res = await fetch('http://localhost:3010/api/candidates', { method: 'POST', body: formData });
+if (!res.ok) {
+	const err: AppError = await decodeError(res);
+	if (err.fieldErrors) setErrors(err.fieldErrors);
+	else setGlobalError(err.message);
+	// In dev, decodeError logs one line:
+	// console.error('API Error', { requestId, errorId, status, code, message })
+}
+```
+
+### Logging and privacy
+
+- Never log PII. Backend uses a whitelist + redaction.
+- Frontend logs are dev-only and exclude PII; include requestId for correlation.
+
+### Contract cheatsheet
+
+- Codes: VALIDATION_ERROR(400), DUPLICATE_EMAIL(409), FILE_TOO_LARGE(413), INVALID_FILE_TYPE(415), INTERNAL_ERROR(500)
+- Headers: Request optional X-Request-Id; Response always sets X-Request-Id
+- DTO fields: errorId, status, code, message, fieldErrors?, details.correlationId?
+
+### Links
+
+- Top-level README “Error handling (EN)” section
+- Source modules: `backend/src/middleware/error.ts`, `backend/src/utils/errorNormalizer.ts`, `frontend/src/api/client.ts`
 
 ## Frontend mapping and UX
 

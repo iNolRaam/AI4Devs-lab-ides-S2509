@@ -145,8 +145,8 @@ Acceptance Criteria:
 - Copy-paste examples for backend errors and frontend mapping
 - Referenced from Memory Bank
 Effort: S
-Status: Not started
-Files/Modules: README.md, memory-bank/error-handling/design.md
+Status: Completed
+Files/Modules: memory-bank/error-handling/design.md
 
 ---
 ID: ERR-13

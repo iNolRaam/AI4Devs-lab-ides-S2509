@@ -18,7 +18,7 @@ Last reviewed: 2025-10-26
  ERR-1 (Request ID middleware) implemented and reviewed; ERR-2 (Canonical error codes/types) completed and tested; ERR-3 (Error normalizer utility) completed with unit tests.
  Backend root response vs test mismatch resolved: tests and server both use "Hola LTI!".
  Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
- Error-handling foundation is complete and tested: ERR-1 (Request ID middleware), ERR-2 (Canonical error codes/types), ERR-3 (Error normalizer utility), ERR-4 (central error middleware), ERR-5 (structured logging with redaction), ERR-6 (frontend AppError + decoder), ERR-7 (accessible ErrorBanner), ERR-8 (field error mapping + focus), ERR-9 (CV type/size validation), ERR-10 (backend error DTO integration tests + route normalization), and ERR-11 (propagate X-Request-Id to frontend logs/telemetry) are implemented with tests.
+ Error-handling foundation is complete and tested: ERR-1 (Request ID middleware), ERR-2 (Canonical error codes/types), ERR-3 (Error normalizer utility), ERR-4 (central error middleware), ERR-5 (structured logging with redaction), ERR-6 (frontend AppError + decoder), ERR-7 (accessible ErrorBanner), ERR-8 (field error mapping + focus), ERR-9 (CV type/size validation), ERR-10 (backend error DTO integration tests + route normalization), ERR-11 (propagate X-Request-Id to frontend logs/telemetry), and ERR-12 (docs & developer guide) are implemented with tests/docs.
  Prepare to move into remaining tasks via /implement <TASK_ID>.
 	- Status: Completed (2025-10-26)
 	- Outcome: confirmation message shown, next actions available (View Candidate, Add Another), candidate retrievable within 5s, a11y considerations applied.
@@ -52,7 +52,6 @@ Last reviewed: 2025-10-26
 2) Wire frontend Candidate Form submission + error mapping; connect Dashboard entry point.
 3) Execute remaining ERR tasks via Kiro‑Lite:
 	- /implement ERR-13 (smoke test UI happy + error)
-	- /implement ERR-12 (docs and developer guide)
 
 ## Active Decisions
 
