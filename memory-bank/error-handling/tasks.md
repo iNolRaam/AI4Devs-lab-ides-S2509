@@ -25,7 +25,7 @@ Acceptance Criteria:
 - Typed error classes with status mapping
 - Unit tests for mapping
 Effort: S
-Status: Not started
+Status: Completed
 Files/Modules: backend/src/errors.ts, backend/src/tests/
 
 ---

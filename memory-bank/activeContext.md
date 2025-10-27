@@ -5,20 +5,21 @@ Last reviewed: 2025-10-26
 
 ## Current Focus
 
-- Memory Bank synced. Four features are defined and ready for implementation:
 	- add-candidate-entry-point (ACEP)
 	- candidate-registration-form (CRF)
 	- validation (VAL)
 	- error-handling (ERR)
-- successful-submission (SS) is completed and documented; focus remains on ACEP, CRF, VAL, and ERR for implementation.
-- ERR-1 (Request ID middleware) implemented and reviewed; ready for ERR-2 next.
-- Backend root response vs test mismatch remains: tests expect "Hello World!", server returns "Hola LTI!".
-- Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
-- Prepare to move into PHASE 3 (Code Generation) via /implement <TASK_ID>.
+ Memory Bank synced. Four features are defined and ready for implementation:
 
 ## Feature snapshots
 
 - successful-submission
+ successful-submission (SS) is completed and documented; focus remains on ACEP, CRF, VAL, and ERR for implementation.
+ ERR-1 (Request ID middleware) implemented and reviewed; ERR-2 (Canonical error codes/types) completed and tested.
+ Backend root response vs test mismatch remains: tests expect "Hello World!", server returns "Hola LTI!".
+ Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
+ All error-handling code tasks to date are complete and tested. Next: implement error normalization and mapping (ERR-3).
+ Prepare to move into PHASE 3 (Code Generation) via /implement <TASK_ID>.
 	- Status: Completed (2025-10-26)
 	- Outcome: confirmation message shown, next actions available (View Candidate, Add Another), candidate retrievable within 5s, a11y considerations applied.
 
