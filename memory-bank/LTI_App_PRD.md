@@ -70,13 +70,6 @@ As a recruiter, I’m informed if something goes wrong.
   - Field errors are mapped back to inputs; non-field errors appear in a toast/banner.
   - Errors are logged for observability without leaking PII.
 
-### 4.7 Accessibility & responsiveness
-As a recruiter, I can use the feature across devices and with assistive tech.
-- Acceptance Criteria
-  - Complies with WCAG 2.1 AA for forms: labels, landmarks, keyboard navigation, focus order, and error announcements via ARIA.
-  - Responsive layouts support ≥320px width and common desktop breakpoints.
-  - Works on latest Chrome, Edge, Firefox, and Safari (last 2 versions).
-
 ## 5. Functional Requirements
 - UI/Navigation
   - Add Candidate entry point on recruiter dashboard.
