@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const MAX_LENGTHS = {
   firstName: 40,
@@ -34,6 +34,16 @@ const CandidateForm: React.FC<{ onClose?: () => void; onViewCandidate?: () => vo
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [cvFile, setCvFile] = useState<File | null>(null);
+
+  // Refs for focus management
+  const cvFileRef = useRef<HTMLInputElement | null>(null);
+  const firstNameRef = useRef<HTMLInputElement | null>(null);
+  const lastNameRef = useRef<HTMLInputElement | null>(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const phoneRef = useRef<HTMLInputElement | null>(null);
+  const addressRef = useRef<HTMLInputElement | null>(null);
+  const educationRef = useRef<HTMLInputElement | null>(null);
+  const workExperienceRef = useRef<HTMLInputElement | null>(null);
 
 
   const validate = () => {
@@ -107,9 +117,13 @@ const CandidateForm: React.FC<{ onClose?: () => void; onViewCandidate?: () => vo
       // Prepare form data for file upload
       const formData = new FormData();
       for (const [key, value] of Object.entries(fields)) {
-        if (key !== 'cvFile') formData.append(key, typeof value === 'string' ? value : '');
+        if (key !== 'cvFile') {
+          formData.append(key, typeof value === 'string' ? value : '');
+        }
       }
-  if (cvFile) formData.append('cvFile', cvFile);
+      if (cvFile) {
+        formData.append('cvFile', cvFile);
+      }
       const response = await fetch('http://localhost:3010/api/candidates', {
         method: 'POST',
         body: formData,
@@ -129,9 +143,43 @@ const CandidateForm: React.FC<{ onClose?: () => void; onViewCandidate?: () => vo
       }
     } catch (err) {
       // Optionally log error for debugging
+      // eslint-disable-next-line no-console
+      console.error('Submit error', err);
       setGlobalError('Network error. Please try again.');
     }
   };
+
+  // Focus the first invalid field when errors are present
+  useEffect(() => {
+    const order: Array<keyof typeof initialState> = [
+      'firstName',
+      'lastName',
+      'email',
+      'phone',
+      'address',
+      'education',
+      'workExperience',
+      'cvFile',
+    ];
+    for (const key of order) {
+      const msg = (errors as any)[key];
+      if (typeof msg === 'string' && msg.trim()) {
+        const refMap: Record<string, React.RefObject<HTMLInputElement>> = {
+          cvFile: cvFileRef,
+          firstName: firstNameRef,
+          lastName: lastNameRef,
+          email: emailRef,
+          phone: phoneRef,
+          address: addressRef,
+          education: educationRef,
+          workExperience: workExperienceRef,
+        };
+        const ref = refMap[key as string];
+        ref?.current?.focus();
+        break;
+      }
+    }
+  }, [errors]);
 
   return (
     <dialog open style={{
@@ -206,6 +254,8 @@ const CandidateForm: React.FC<{ onClose?: () => void; onViewCandidate?: () => vo
               type="file"
               accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               onChange={handleChange}
+              ref={cvFileRef}
+              aria-invalid={!!errors.cvFile}
               aria-describedby={errors.cvFile ? 'cvFile-error' : undefined}
             />
             {errors.cvFile && (
@@ -217,13 +267,13 @@ const CandidateForm: React.FC<{ onClose?: () => void; onViewCandidate?: () => vo
           </label>
           <label htmlFor="firstName">
             First Name <span style={{ color: 'red' }}>*</span>
-            <input id="firstName" name="firstName" type="text" placeholder="e.g. Jane" value={fields.firstName} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.firstName} aria-describedby={errors.firstName ? 'firstName-error firstName-count' : 'firstName-count'} maxLength={MAX_LENGTHS.firstName} />
+            <input id="firstName" name="firstName" type="text" placeholder="e.g. Jane" value={fields.firstName} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.firstName} aria-describedby={errors.firstName ? 'firstName-error firstName-count' : 'firstName-count'} maxLength={MAX_LENGTHS.firstName} ref={firstNameRef} />
             <span id="firstName-count" style={{ fontSize: '0.8em', color: '#888', float: 'right' }}>{fields.firstName.length}/{MAX_LENGTHS.firstName}</span>
             {errors.firstName && <span id="firstName-error" style={{ color: 'red', fontSize: '0.9em' }} role="alert" aria-live="assertive">{errors.firstName}</span>}
           </label>
           <label htmlFor="lastName">
             Last Name <span style={{ color: 'red' }}>*</span>
-            <input id="lastName" name="lastName" type="text" placeholder="e.g. Doe" value={fields.lastName} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.lastName} aria-describedby={errors.lastName ? 'lastName-error lastName-count' : 'lastName-count'} maxLength={MAX_LENGTHS.lastName} />
+            <input id="lastName" name="lastName" type="text" placeholder="e.g. Doe" value={fields.lastName} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.lastName} aria-describedby={errors.lastName ? 'lastName-error lastName-count' : 'lastName-count'} maxLength={MAX_LENGTHS.lastName} ref={lastNameRef} />
             <span id="lastName-count" style={{ fontSize: '0.8em', color: '#888', float: 'right' }}>{fields.lastName.length}/{MAX_LENGTHS.lastName}</span>
             {errors.lastName && <span id="lastName-error" style={{ color: 'red', fontSize: '0.9em' }} role="alert" aria-live="assertive">{errors.lastName}</span>}
           </label>
@@ -241,6 +291,7 @@ const CandidateForm: React.FC<{ onClose?: () => void; onViewCandidate?: () => vo
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? 'email-error email-help email-count' : 'email-help email-count'}
               maxLength={MAX_LENGTHS.email}
+              ref={emailRef}
             />
             <span id="email-help" style={{ fontSize: '0.85em', color: '#555', display: 'block', marginTop: '0.2em' }}>
               Example: jane.doe@email.com
@@ -262,6 +313,7 @@ const CandidateForm: React.FC<{ onClose?: () => void; onViewCandidate?: () => vo
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? 'phone-error phone-help phone-count' : 'phone-help phone-count'}
               maxLength={MAX_LENGTHS.phone}
+              ref={phoneRef}
             />
             <span id="phone-help" style={{ fontSize: '0.85em', color: '#555', display: 'block', marginTop: '0.2em' }}>
               Example: +1 555 123 4567
@@ -271,19 +323,19 @@ const CandidateForm: React.FC<{ onClose?: () => void; onViewCandidate?: () => vo
           </label>
           <label htmlFor="address">
             Address <span style={{ color: 'red' }}>*</span>
-            <input id="address" name="address" type="text" placeholder="e.g. 123 Main St, City" value={fields.address} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.address} aria-describedby={errors.address ? 'address-error address-count' : 'address-count'} maxLength={MAX_LENGTHS.address} />
+            <input id="address" name="address" type="text" placeholder="e.g. 123 Main St, City" value={fields.address} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.address} aria-describedby={errors.address ? 'address-error address-count' : 'address-count'} maxLength={MAX_LENGTHS.address} ref={addressRef} />
             <span id="address-count" style={{ fontSize: '0.8em', color: '#888', float: 'right' }}>{fields.address.length}/{MAX_LENGTHS.address}</span>
             {errors.address && <span id="address-error" style={{ color: 'red', fontSize: '0.9em' }} role="alert" aria-live="assertive">{errors.address}</span>}
           </label>
           <label htmlFor="education">
             Education <span style={{ color: 'red' }}>*</span>
-            <input id="education" name="education" type="text" placeholder="e.g. BSc Computer Science" value={fields.education} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.education} aria-describedby={errors.education ? 'education-error education-count' : 'education-count'} maxLength={MAX_LENGTHS.education} />
+            <input id="education" name="education" type="text" placeholder="e.g. BSc Computer Science" value={fields.education} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.education} aria-describedby={errors.education ? 'education-error education-count' : 'education-count'} maxLength={MAX_LENGTHS.education} ref={educationRef} />
             <span id="education-count" style={{ fontSize: '0.8em', color: '#888', float: 'right' }}>{fields.education.length}/{MAX_LENGTHS.education}</span>
             {errors.education && <span id="education-error" style={{ color: 'red', fontSize: '0.9em' }} role="alert" aria-live="assertive">{errors.education}</span>}
           </label>
           <label htmlFor="workExperience">
             Work Experience <span style={{ color: 'red' }}>*</span>
-            <input id="workExperience" name="workExperience" type="text" placeholder="e.g. 3 years at Acme Corp" value={fields.workExperience} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.workExperience} aria-describedby={errors.workExperience ? 'workExperience-error workExperience-count' : 'workExperience-count'} maxLength={MAX_LENGTHS.workExperience} />
+            <input id="workExperience" name="workExperience" type="text" placeholder="e.g. 3 years at Acme Corp" value={fields.workExperience} onChange={handleChange} style={{ width: '100%' }} aria-required="true" aria-invalid={!!errors.workExperience} aria-describedby={errors.workExperience ? 'workExperience-error workExperience-count' : 'workExperience-count'} maxLength={MAX_LENGTHS.workExperience} ref={workExperienceRef} />
             <span id="workExperience-count" style={{ fontSize: '0.8em', color: '#888', float: 'right' }}>{fields.workExperience.length}/{MAX_LENGTHS.workExperience}</span>
             {errors.workExperience && <span id="workExperience-error" style={{ color: 'red', fontSize: '0.9em' }} role="alert" aria-live="assertive">{errors.workExperience}</span>}
           </label>

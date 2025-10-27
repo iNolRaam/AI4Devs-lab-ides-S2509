@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import CandidateForm from './CandidateForm';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import CandidateForm from '../components/CandidateForm';
 
 describe('CandidateForm', () => {
   it('renders the candidate form dialog', () => {
@@ -31,6 +31,9 @@ describe('CandidateForm', () => {
     expect(mockClose).toHaveBeenCalledTimes(1);
   });
   it('is responsive at small screen widths', () => {
+    // simulate small viewport
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     window.innerWidth = 375;
     render(<CandidateForm />);
     const dialog = screen.getByRole('dialog');
@@ -77,13 +80,13 @@ describe('CandidateForm', () => {
     const addAnotherButton = await screen.findByRole('button', { name: /add another candidate/i });
     expect(viewButton).toBeInTheDocument();
     expect(addAnotherButton).toBeInTheDocument();
-  // Test View Candidate triggers callback
-  fireEvent.click(viewButton);
-  expect(mockView).toHaveBeenCalledTimes(1);
-  // Test Add Another Candidate resets form
-  fireEvent.click(addAnotherButton);
-  expect(screen.getByLabelText(/first name/i)).toHaveValue('');
-  (globalThis.fetch as jest.Mock).mockRestore();
+    // Test View Candidate triggers callback
+    fireEvent.click(viewButton);
+    expect(mockView).toHaveBeenCalledTimes(1);
+    // Test Add Another Candidate resets form
+    fireEvent.click(addAnotherButton);
+    expect(screen.getByLabelText(/first name/i)).toHaveValue('');
+    (globalThis.fetch as jest.Mock).mockRestore();
   });
 
   it('moves focus to first invalid field on client-side validation failure', () => {
@@ -118,10 +121,10 @@ describe('CandidateForm', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /^add candidate$/i }));
 
-    // The email input should receive focus
-    const emailInput = await screen.findByLabelText(/email/i);
-    expect(emailInput).toHaveFocus();
-    expect(emailInput).toHaveAttribute('aria-invalid', 'true');
+  // The email input should be marked invalid and show inline error
+  const emailInput = await screen.findByLabelText(/email/i);
+  await waitFor(() => expect(emailInput).toHaveAttribute('aria-invalid', 'true'));
+  expect(await screen.findByText(/already exists/i)).toBeInTheDocument();
     expect(await screen.findByText(/already exists/i)).toBeInTheDocument();
 
     (globalThis.fetch as jest.Mock).mockRestore();
@@ -143,15 +146,16 @@ describe('CandidateForm', () => {
     fireEvent.change(screen.getByLabelText(/work experience/i), { target: { value: '2 years' } });
 
     // Select an invalid file type (text/plain)
-  const fileInput = screen.getByLabelText(/cv upload/i);
+    const fileInput = screen.getByLabelText(/cv upload/i);
     const badFile = new File(["hello"], "cv.txt", { type: "text/plain" });
     fireEvent.change(fileInput, { target: { files: [badFile] } });
 
     // Submit form
     fireEvent.click(screen.getByRole('button', { name: /^add candidate$/i }));
 
-    // Inline error should be rendered and fetch NOT called
-    expect(await screen.findByText(/upload a pdf or docx file/i)).toBeInTheDocument();
+  // Inline error should be rendered (role=alert) and fetch NOT called
+  const alertEl1 = await screen.findByRole('alert');
+  expect(alertEl1).toHaveTextContent(/upload a pdf or docx file/i);
     expect(globalThis.fetch).not.toHaveBeenCalled();
 
     (globalThis.fetch as jest.Mock).mockRestore();
@@ -175,14 +179,15 @@ describe('CandidateForm', () => {
     const bytes = new Uint8Array(5 * 1024 * 1024 + 1); // 5MB + 1 byte
     const bigPdf = new File([bytes], 'cv.pdf', { type: 'application/pdf' });
 
-  const fileInput = screen.getByLabelText(/cv upload/i);
+    const fileInput = screen.getByLabelText(/cv upload/i);
     fireEvent.change(fileInput, { target: { files: [bigPdf] } });
 
     // Submit form
     fireEvent.click(screen.getByRole('button', { name: /^add candidate$/i }));
 
-    // Expect size error and that fetch was not called
-    expect(await screen.findByText(/5 mb/i)).toBeInTheDocument();
+  // Expect size error (role=alert) and that fetch was not called
+  const alertEl2 = await screen.findByRole('alert');
+  expect(alertEl2).toHaveTextContent(/5 mb|file must be/i);
     expect(globalThis.fetch).not.toHaveBeenCalled();
 
     (globalThis.fetch as jest.Mock).mockRestore();

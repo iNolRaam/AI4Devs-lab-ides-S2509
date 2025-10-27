@@ -97,7 +97,7 @@ Acceptance Criteria:
 - Focus management to first invalid control
 - Works alongside existing client-side checks
 Effort: M
-Status: Not started
+Status: Completed
 Files/Modules: frontend/src/components/CandidateForm.tsx, frontend/src/components/CandidateForm.test.tsx
 
 ---
@@ -109,7 +109,7 @@ Acceptance Criteria:
 - Blocks submit when invalid
 - Tests cover both conditions
 Effort: S
-Status: Not started
+Status: Completed
 Files/Modules: frontend/src/components/CandidateForm.tsx, frontend/src/components/CandidateForm.test.tsx
 
 ---

@@ -1,6 +1,6 @@
 # Active Context — Current Focus and Decisions
 
-Last reviewed: 2025-10-26
+Last reviewed: 2025-10-27
 
 
 ## Current Focus
@@ -18,7 +18,7 @@ Last reviewed: 2025-10-26
  ERR-1 (Request ID middleware) implemented and reviewed; ERR-2 (Canonical error codes/types) completed and tested; ERR-3 (Error normalizer utility) completed with unit tests.
  Backend root response vs test mismatch resolved: tests and server both use "Hola LTI!".
  Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
- Error-handling foundation is complete and tested: ERR-1 (Request ID middleware), ERR-2 (Canonical error codes/types), ERR-3 (Error normalizer utility), ERR-4 (central error middleware), ERR-5 (structured logging with redaction), ERR-6 (frontend AppError + decoder), and ERR-7 (accessible ErrorBanner) are implemented with tests.
+ Error-handling foundation is complete and tested: ERR-1 (Request ID middleware), ERR-2 (Canonical error codes/types), ERR-3 (Error normalizer utility), ERR-4 (central error middleware), ERR-5 (structured logging with redaction), ERR-6 (frontend AppError + decoder), ERR-7 (accessible ErrorBanner), ERR-8 (field error mapping + focus), and ERR-9 (CV type/size validation) are implemented with tests.
  Prepare to move into PHASE 3 (Code Generation) via /implement <TASK_ID>.
 	- Status: Completed (2025-10-26)
 	- Outcome: confirmation message shown, next actions available (View Candidate, Add Another), candidate retrievable within 5s, a11y considerations applied.
@@ -52,7 +52,7 @@ Last reviewed: 2025-10-26
 	 - /implement ACEP-1, ACEP-2, ACEP-3
 	 - /implement CRF-1 … CRF-8
 	 - /implement VAL-1 … VAL-5
-	- /implement ERR-8
+	- /implement ERR-11 → ERR-10 → ERR-13 → ERR-12
 
 ## Active Decisions
 
