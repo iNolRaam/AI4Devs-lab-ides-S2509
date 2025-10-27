@@ -65,4 +65,26 @@ describe('decodeError', () => {
     expect(err.code).toBe('INTERNAL_ERROR');
     expect(err.requestId).toBe('req-teapot');
   });
+
+  it('logs requestId on handled server errors in non-production environments', async () => {
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const body: Partial<ServerErrorDTO> = {
+      status: 409,
+      code: 'DUPLICATE_EMAIL',
+      message: 'Email already exists',
+      errorId: 'e-123',
+    };
+    const fakeResponse = {
+      status: 409,
+      headers: makeHeaders({ 'X-Request-Id': 'req-xyz' }),
+      json: async () => body,
+    };
+    await decodeError(fakeResponse);
+    expect(spy).toHaveBeenCalled();
+    const callArgs = spy.mock.calls.find(([msg]) => msg === 'API Error');
+    expect(callArgs).toBeTruthy();
+    const payload = callArgs?.[1];
+    expect(payload).toMatchObject({ requestId: 'req-xyz', status: 409, code: 'DUPLICATE_EMAIL' });
+    spy.mockRestore();
+  });
 });

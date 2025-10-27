@@ -11,6 +11,7 @@
 
 - Error-handling feature: All backend requests must have a requestId (from X-Request-Id or generated UUID) attached and returned in response headers. This enables correlation and observability without leaking PII. Use the requestId middleware pattern for all new endpoints.
 - Express route handlers must not send ad-hoc error JSON. Throw typed errors (e.g., ValidationError, DuplicateEmailError) and let the central error middleware normalize into the standard DTO. Prefer tagging third‑party errors with canonical codes when possible (e.g., Multer `LIMIT_FILE_SIZE` → `FILE_TOO_LARGE`; set `INVALID_FILE_TYPE` in `fileFilter`).
+ - Frontend must propagate `X-Request-Id` into `AppError.requestId` and, in non‑production builds, emit a single concise console.error per handled API error including: `{ requestId, errorId, status, code, message }`. Never log PII.
 
 ## ✅ Coding conventions
 

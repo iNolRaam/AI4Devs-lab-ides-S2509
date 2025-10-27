@@ -54,11 +54,20 @@ function hasResponseShape(value: unknown): value is {
 export async function decodeError(input: unknown): Promise<AppError> {
   // Network error or unknown thrown
   if (!hasResponseShape(input)) {
-    return {
+    const appErr: AppError = {
       status: 0,
       code: 'INTERNAL_ERROR',
       message: 'Network error. Please try again.',
     };
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error('API Error', {
+        status: appErr.status,
+        code: appErr.code,
+        message: appErr.message,
+      });
+    }
+    return appErr;
   }
 
   const res = input;
@@ -90,14 +99,35 @@ export async function decodeError(input: unknown): Promise<AppError> {
         }, {})
       : undefined;
     const errorId = typeof dto.errorId === 'string' ? dto.errorId : undefined;
-    return { status, code, message, fieldErrors, requestId, errorId };
+    const appErr: AppError = { status, code, message, fieldErrors, requestId, errorId };
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error('API Error', {
+        requestId: appErr.requestId,
+        errorId: appErr.errorId,
+        status: appErr.status,
+        code: appErr.code,
+        message: appErr.message,
+      });
+    }
+    return appErr;
   }
 
   // Non-JSON or malformed
-  return {
+  const appErr: AppError = {
     status: res.status ?? 500,
     code: 'INTERNAL_ERROR',
     message: 'Something went wrong. Please try again.',
     requestId,
   };
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line no-console
+    console.error('API Error', {
+      requestId: appErr.requestId,
+      status: appErr.status,
+      code: appErr.code,
+      message: appErr.message,
+    });
+  }
+  return appErr;
 }

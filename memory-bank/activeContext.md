@@ -18,7 +18,7 @@ Last reviewed: 2025-10-26
  ERR-1 (Request ID middleware) implemented and reviewed; ERR-2 (Canonical error codes/types) completed and tested; ERR-3 (Error normalizer utility) completed with unit tests.
  Backend root response vs test mismatch resolved: tests and server both use "Hola LTI!".
  Prisma migration for Candidate model exists; ensure local DB is migrated before API integration.
- Error-handling foundation is complete and tested: ERR-1 (Request ID middleware), ERR-2 (Canonical error codes/types), ERR-3 (Error normalizer utility), ERR-4 (central error middleware), ERR-5 (structured logging with redaction), ERR-6 (frontend AppError + decoder), ERR-7 (accessible ErrorBanner), ERR-8 (field error mapping + focus), ERR-9 (CV type/size validation), and ERR-10 (backend error DTO integration tests + route normalization) are implemented with tests.
+ Error-handling foundation is complete and tested: ERR-1 (Request ID middleware), ERR-2 (Canonical error codes/types), ERR-3 (Error normalizer utility), ERR-4 (central error middleware), ERR-5 (structured logging with redaction), ERR-6 (frontend AppError + decoder), ERR-7 (accessible ErrorBanner), ERR-8 (field error mapping + focus), ERR-9 (CV type/size validation), ERR-10 (backend error DTO integration tests + route normalization), and ERR-11 (propagate X-Request-Id to frontend logs/telemetry) are implemented with tests.
  Prepare to move into remaining tasks via /implement <TASK_ID>.
 	- Status: Completed (2025-10-26)
 	- Outcome: confirmation message shown, next actions available (View Candidate, Add Another), candidate retrievable within 5s, a11y considerations applied.
@@ -43,13 +43,14 @@ Last reviewed: 2025-10-26
 - Docker Compose provides local Postgres for development.
 - Candidate POST now throws typed errors (ValidationError, DuplicateEmailError); central error middleware returns standardized DTO with X-Request-Id.
 - Multer LIMIT_FILE_SIZE is mapped to FILE_TOO_LARGE (413); invalid file type tagged as INVALID_FILE_TYPE in fileFilter.
+ - Frontend decoder includes requestId and logs a single dev-only console.error with { requestId, errorId, status, code, message } for handled errors.
+ - Test status: backend 31/31; frontend 20/20.
 
 ## Next steps (actionable)
 
 1) Apply Prisma migrations locally; generate client; add seed if needed.
 2) Wire frontend Candidate Form submission + error mapping; connect Dashboard entry point.
 3) Execute remaining ERR tasks via Kiro‑Lite:
-	- /implement ERR-11 (propagate X-Request-Id to frontend logs/telemetry)
 	- /implement ERR-13 (smoke test UI happy + error)
 	- /implement ERR-12 (docs and developer guide)
 

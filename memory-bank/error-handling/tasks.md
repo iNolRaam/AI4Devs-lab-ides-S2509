@@ -133,8 +133,8 @@ Acceptance Criteria:
 - Console log shows requestId on handled errors in dev
 - Unit test ensures propagation
 Effort: S
-Status: Not started
-Files/Modules: frontend/src/api/client.ts, frontend/src/tests/
+Status: Completed
+Files/Modules: frontend/src/api/client.ts, frontend/src/tests/api.client.test.ts
 
 ---
 ID: ERR-12

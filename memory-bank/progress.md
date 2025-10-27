@@ -22,8 +22,8 @@ Last reviewed: 2025-10-26
 
 - error-handling (ERR)
 	- PRD: present • Design: present • Tasks: present • Status: In progress
-	- Completed tasks: ERR-1, ERR-2, ERR-3, ERR-4, ERR-5, ERR-6, ERR-7, ERR-8, ERR-9, ERR-10
-	- Next: ERR-11 → ERR-13 → ERR-12
+	- Completed tasks: ERR-1, ERR-2, ERR-3, ERR-4, ERR-5, ERR-6, ERR-7, ERR-8, ERR-9, ERR-10, ERR-11
+	- Next: ERR-13 → ERR-12
 
 ## What works today
 
